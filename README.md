@@ -69,7 +69,7 @@ A full-stack real-time collaborative coding interview platform. Interviewers cre
 
 ## Architecture Overview
 
-```
+```mermaid
 flowchart TD
     subgraph CLIENT["CLIENT (React)"]
         Pages["Pages: Home → Login/Register → Dashboard → Room"]
