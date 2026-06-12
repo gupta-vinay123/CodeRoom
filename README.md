@@ -106,36 +106,6 @@ flowchart TD
     AX -->|REST| Routes
     GETIO1 --> SC
     GETIO2 --> SC
-┌─────────────────────────────────────────────────────────────┐
-│                        CLIENT (React)                       │
-│                                                             │
-│  Pages: Home → Login/Register → Dashboard → Room           │
-│                                      ↓           ↓         │
-│                               Replay / Review              │
-│                                                             │
-│  Socket.io client ←──────────────────────────────────────┐ │
-│  Axios (REST) ────────────────────────────────────────┐   │ │
-└──────────────────────────────────────────────────────────┘ │
-                           │ REST   │ WS                      │
-┌──────────────────────────▼────────▼──────────────────────┐ │
-│                    EXPRESS SERVER                         │ │
-│                                                           │ │
-│  Routes → Controllers → Mongoose Models                   │ │
-│                ↓                                          │ │
-│         BullMQ Queues ──→ Workers                         │ │
-│              ↓                  ↓                         │ │
-│         AI Queue          Execution Queue                 │ │
-│         (Groq/Llama)      (JDoodle API)                   │ │
-│              ↓                  ↓                         │ │
-│         getIO().emit()    getIO().emit()                   │ │
-│                                                           │ │
-│  Socket.io Server ────────────────────────────────────────┘ │
-│       ↓                                                      │
-│  roomHandlers / editorHandlers / chatHandlers                │
-│                                                             │
-│  Redis (Upstash) — room state, active users, hint count     │
-│  MongoDB — users, rooms, messages, snapshots                │
-└─────────────────────────────────────────────────────────────┘
 ```
 
 ### Key Architectural Decisions
