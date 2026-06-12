@@ -70,6 +70,42 @@ A full-stack real-time collaborative coding interview platform. Interviewers cre
 ## Architecture Overview
 
 ```
+flowchart TD
+    subgraph CLIENT["CLIENT (React)"]
+        Pages["Pages: Home → Login/Register → Dashboard → Room"]
+        RR["Replay / Review"]
+        SC["Socket.io client"]
+        AX["Axios (REST)"]
+        Pages --> RR
+    end
+
+    subgraph SERVER["EXPRESS SERVER"]
+        Routes["Routes → Controllers → Mongoose Models"]
+        
+        subgraph QUEUE["BullMQ Queues → Workers"]
+            AIQ["AI Queue\n(Groq/Llama)"]
+            EXQ["Execution Queue\n(JDoodle API)"]
+        end
+
+        GETIO1["getIO().emit()"]
+        GETIO2["getIO().emit()"]
+        SIO["Socket.io Server"]
+        HANDLERS["roomHandlers / editorHandlers / chatHandlers"]
+        REDIS["Redis (Upstash) — room state, active users, hint count"]
+        MONGO["MongoDB — users, rooms, messages, snapshots"]
+
+        Routes --> QUEUE
+        AIQ --> GETIO1
+        EXQ --> GETIO2
+        SIO --> HANDLERS
+        HANDLERS --> REDIS
+        HANDLERS --> MONGO
+    end
+
+    SC <-->|WS| SIO
+    AX -->|REST| Routes
+    GETIO1 --> SC
+    GETIO2 --> SC
 ┌─────────────────────────────────────────────────────────────┐
 │                        CLIENT (React)                       │
 │                                                             │
